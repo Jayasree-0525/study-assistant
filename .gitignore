@@ -205,3 +205,6 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+data/tables.db
+chroma_db/ git rm -r --cached chroma_db/ git add -A git commit -m add multi-modal document ingestion pipeline git push origin main
+chroma_db/
