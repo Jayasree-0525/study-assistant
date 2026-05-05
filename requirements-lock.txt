@@ -189,7 +189,7 @@ sortedcontainers==2.4.0
 SQLAlchemy==2.0.49
 starlette==1.0.0
 streamlit==1.56.0
--e git+https://github.com/Jayasree-0525/study-assistant.git@c849d27a53a712e0e4e03006624f5cd8321cb1ab#egg=study_assistant
+-e git+https://github.com/Jayasree-0525/study-assistant.git@3cb8a130cce22fa7ef23db4fb9fd32738261320b#egg=study_assistant
 sympy==1.14.0
 tavily-python==0.7.23
 tenacity==9.1.4
