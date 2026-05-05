@@ -14,6 +14,8 @@ from typing_extensions import TypedDict
 
 load_dotenv()
 
+# overall goal of this file is to
+
 SYSTEM_PROMPT = """You are a helpful study assistant for a university course
 on Markets and Competitive Strategy (JRE410).
 
