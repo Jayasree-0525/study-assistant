@@ -1,3 +1,13 @@
+---
+title: Study Assistant
+emoji: 📚
+colorFrom: green
+colorTo: blue
+sdk: docker
+pinned: false
+---
+
+
 # study-assistant
  Multi-modal RAG study assistant with agentic orchestration
 
