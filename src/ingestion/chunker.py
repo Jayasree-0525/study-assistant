@@ -31,9 +31,7 @@ def chunk_pages(
             if not chunk_text.strip():
                 continue
 
-            chunk_hash = hashlib.md5(
-                f"{page['source_file']}_{page['page_num']}_{chunk_idx}_{chunk_text[:50]}".encode()
-            ).hexdigest()
+            chunk_hash = hashlib.md5(f"{page['source_file']}_{page['page_num']}_{chunk_idx}_{chunk_text[:50]}".encode()).hexdigest()
 
             all_chunks.append(
                 {

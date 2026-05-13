@@ -57,9 +57,7 @@ def extract_tables_from_pdf(
                 if not table or len(table) < 2:
                     continue
                 markdown = _table_to_markdown(table)
-                chunk_hash = hashlib.md5(
-                    f"{pdf_path.name}_table_{page_num}_{table_idx}".encode()
-                ).hexdigest()
+                chunk_hash = hashlib.md5(f"{pdf_path.name}_table_{page_num}_{table_idx}".encode()).hexdigest()
                 try:
                     conn.execute(
                         """INSERT OR IGNORE INTO extracted_tables

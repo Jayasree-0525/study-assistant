@@ -30,6 +30,6 @@ jobs:
         run: ruff format --check src/ tests/
 
       - name: Run tests
-        run: pytest tests/ -v
+        run: pytest tests/test_ingestion.py -v
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

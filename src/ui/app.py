@@ -85,7 +85,7 @@ def render_upload_page():
                             extract_images=False,
                         )
                         st.session_state["uploaded_files"].append(file.name)
-                        st.success(f"✅ {file.name} — " f"{result['total_chunks']} chunks indexed")
+                        st.success(f"✅ {file.name} — {result['total_chunks']} chunks indexed")
                     except Exception as e:
                         st.error(f"❌ Failed to process {file.name}: {e}")
 
@@ -148,7 +148,7 @@ def render_chat_page():
     st.title("💬 Chat with your notes")
 
     if not st.session_state["uploaded_files"]:
-        st.warning("No files uploaded yet. " "Go back to upload your lecture PDFs first.")
+        st.warning("No files uploaded yet. Go back to upload your lecture PDFs first.")
         if st.button("← Upload files"):
             st.session_state["page"] = "upload"
             st.rerun()

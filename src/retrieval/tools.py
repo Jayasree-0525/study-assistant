@@ -41,7 +41,7 @@ def semantic_search(query: str, n_results: int = 5) -> str:
 
     output = []
     for i, r in enumerate(results, 1):
-        output.append(f"[Result {i} | {r['source_file']} p.{r['page_num']} " f"| score: {r['similarity_score']}]\n{r['text']}")
+        output.append(f"[Result {i} | {r['source_file']} p.{r['page_num']} | score: {r['similarity_score']}]\n{r['text']}")
 
     return "\n\n---\n\n".join(output)
 
@@ -122,7 +122,7 @@ def web_search(query: str) -> str:
 
     output = []
     for r in results:
-        output.append(f"[{r.get('title', 'No title')}]\n" f"URL: {r.get('url', '')}\n" f"{r.get('content', '')[:300]}")
+        output.append(f"[{r.get('title', 'No title')}]\nURL: {r.get('url', '')}\n{r.get('content', '')[:300]}")
 
     return "\n\n---\n\n".join(output)
 

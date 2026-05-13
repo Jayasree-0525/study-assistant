@@ -39,9 +39,7 @@ def _describe_image_with_gpt4o(image_b64: str, client: OpenAI) -> str:
                     {
                         "type": "text",
                         "text": (
-                            "This is a lecture slide. Describe all diagrams, "
-                            "charts, figures, and equations in detail. "
-                            "If no visuals exist, respond with SKIP."
+                            "This is a lecture slide. Describe all diagrams, charts, figures, and equations in detail. If no visuals exist, respond with SKIP."
                         ),
                     },
                     {
