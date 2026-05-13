@@ -7,45 +7,49 @@ sdk: docker
 pinned: false
 ---
 
-
-# study-assistant
- Multi-modal RAG study assistant with agentic orchestration
-
 # Study Assistant — Multi-modal RAG with Agentic Orchestration
 
-A production-grade AI study assistant that ingests lecture notes, slides,
-and handwritten notes, then answers questions and generates quizzes using
-a multi-modal RAG pipeline with agentic tool orchestration.
+A production-grade AI study assistant that ingests lecture notes and PDFs,
+then answers questions and retrieves cited content using a multi-modal RAG
+pipeline with agentic tool orchestration built on LangGraph.
 
 ## Live Demo
-[Link to Hugging Face Space — add when deployed]
+[🚀 Try it on Hugging Face Spaces](https://huggingface.co/spaces/jayasree-s/study-assistant)
+
+## What it does
+Upload any lecture PDF and ask questions about it. The agent:
+- Searches your notes semantically using ChromaDB vector search
+- Queries structured table data extracted from slides
+- Falls back to web search when notes don't contain the answer
+- Remembers conversation history within a session
+- Cites the exact page number for every answer
 
 ## Architecture
-[Architecture diagram — add in Phase 4]
-
-## Features
-- Upload PDFs, images, and text files
-- Semantic search across all uploaded content
-- SQL queries over extracted tables
-- Web search fallback via Tavily when content is not in notes
-- Quiz generation with structured JSON output
-- Session memory for follow-up questions
-- RAGAS evaluation scores: [add after Phase 4]
+```
+User uploads PDF
+      ↓
+Ingestion pipeline (PyMuPDF + pdfplumber + OpenAI embeddings)
+      ↓
+ChromaDB vector store (138 chunks per lecture)
+      ↓
+LangGraph ReAct agent (GPT-4o-mini + 3 tools)
+      ↓
+Streamlit frontend → cited answer with page numbers
+```
 
 ## Tech Stack
 | Layer | Technology |
 |---|---|
-| Agent orchestration | LangGraph |
-| Vector store | ChromaDB |
-| Document parsing | PyMuPDF, pdfplumber |
-| Embeddings | OpenAI text-embedding-3-small |
-| LLM | GPT-4o |
-| Web search | Tavily API |
-| Pipeline | Prefect |
-| Evaluation | RAGAS |
 | Frontend | Streamlit |
+| Agent orchestration | LangGraph |
+| LLM | GPT-4o-mini |
+| Vector store | ChromaDB |
+| Embeddings | OpenAI text-embedding-3-small |
+| Document parsing | PyMuPDF + pdfplumber |
+| Web search | Tavily API |
+| Pipeline orchestration | Prefect |
 | CI/CD | GitHub Actions |
-| Deployment | Hugging Face Spaces |
+| Deployment | Docker + Hugging Face Spaces |
 
 ## Setup
 
@@ -53,36 +57,40 @@ a multi-modal RAG pipeline with agentic tool orchestration.
 - Python 3.11+
 - OpenAI API key
 - Tavily API key
+- Docker (for containerized deployment)
 
-### Installation
+### Local installation
 ```bash
-git clone https://github.com/YOUR_USERNAME/study-assistant.git
+git clone https://github.com/Jayasree-0525/study-assistant.git
 cd study-assistant
 python3 -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -e ".[dev]"
-cp .env.example .env       # Add your API keys to .env
-```
-
-### Run locally
-```bash
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env  # add your API keys
 streamlit run src/ui/app.py
 ```
 
-### Run tests
+### Docker
 ```bash
-pytest tests/ -v
+docker build -t study-assistant .
+docker run -p 7860:7860 \
+  -e OPENAI_API_KEY=your-key \
+  -e TAVILY_API_KEY=your-key \
+  study-assistant
 ```
 
-## Design Decisions
-[Fill this in as you build — explain why you chose each tool]
+## How the agent works
+The agent uses a ReAct loop — it reasons about which tool to call,
+executes the tool, reads the result, and decides whether to call
+another tool or synthesise a final answer. Three tools are available:
 
-## Evaluation Results
-[RAGAS scores — add after Phase 4]
+1. **semantic_search** — embeds the query and searches ChromaDB
+2. **query_tables** — queries structured data extracted from slides
+3. **web_search** — Tavily API fallback for external context
 
 ## Project Status
 - [x] Phase 1: Setup and environment
-- [ ] Phase 2: Document ingestion pipeline
-- [ ] Phase 3: Agentic retrieval system
-- [ ] Phase 4: Orchestration and evaluation
-- [ ] Phase 5: Deployment
+- [x] Phase 2: Multi-modal document ingestion pipeline
+- [x] Phase 3: LangGraph agent with tools and memory
+- [x] Phase 4: Streamlit frontend
+- [x] Phase 5: Docker and Hugging Face deployment
