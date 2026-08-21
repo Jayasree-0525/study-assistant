@@ -6,3 +6,5 @@ textColor = "#1A1A18"
 
 [server]
 maxUploadSize = 50
+enableXsrfProtection = false
+enableCORS = false
