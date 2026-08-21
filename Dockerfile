@@ -43,6 +43,7 @@ COPY .streamlit/ ./.streamlit/
 RUN mkdir -p data/raw data/processed
 
 # expose Streamlit port
+ENV CHROMA_PERSIST_DIR=/tmp/study-assistant/chroma_db
 EXPOSE 7860
 
 # set environment variables

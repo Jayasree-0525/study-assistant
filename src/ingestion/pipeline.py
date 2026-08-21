@@ -20,7 +20,7 @@ def _file_hash(file_path: str) -> str:
 def ingest_document(
     file_path: str,
     extract_images: bool = False,
-    db_path: str = "data/tables.db",
+    db_path: str = "/tmp/study-assistant/data/tables.db",
 ) -> dict:
     """Full ingestion pipeline for a single PDF document."""
     file_path = Path(file_path)

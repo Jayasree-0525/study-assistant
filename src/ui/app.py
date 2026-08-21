@@ -47,7 +47,7 @@ def get_agent():
 # ── helper: save uploaded file to disk ───────────────────────────────────────
 def save_uploaded_file(uploaded_file) -> str:
     """Save a Streamlit UploadedFile to data/raw/ and return the path."""
-    save_dir = Path("data/raw")
+    save_dir = Path("/tmp/study-assistant/data/raw")
     save_dir.mkdir(parents=True, exist_ok=True)
     save_path = save_dir / uploaded_file.name
     with open(save_path, "wb") as f:
