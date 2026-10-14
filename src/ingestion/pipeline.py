@@ -5,7 +5,6 @@ from pathlib import Path
 
 from ingestion.chunker import chunk_pages
 from ingestion.pdf_extractor import extract_text_from_pdf
-from ingestion.table_extractor import extract_tables_from_pdf
 from ingestion.vector_store import add_chunks_to_chroma
 
 
@@ -53,17 +52,18 @@ def ingest_document(
         print("2. Extracting visuals (GPT-4o)...")
         from ingestion.image_extractor import extract_images_from_pdf
 
-        image_pages = extract_images_from_pdf(str(file_path), max_pages=10)
+        image_pages = extract_images_from_pdf(str(file_path))
         summary["image_pages"] = len(image_pages)
         image_chunks = chunk_pages(image_pages)
         all_chunks.extend(image_chunks)
     else:
         print("2. Skipping image extraction (extract_images=False)")
 
-    print("3. Extracting tables...")
+    '''print("3. Extracting tables...")
     table_data = extract_tables_from_pdf(str(file_path), db_path=db_path)
     summary["tables"] = len(table_data)
-    all_chunks.extend(chunk_pages(table_data))
+    all_chunks.extend(chunk_pages(table_data))'''
+    print("3. Skipping table extraction (slide deck)")
 
     summary["total_chunks"] = len(all_chunks)
     print(f"4. Embedding {len(all_chunks)} chunks...")
@@ -76,4 +76,4 @@ def ingest_document(
 if __name__ == "__main__":
     import sys
 
-    ingest_document(sys.argv[1], extract_images=False)
+    ingest_document(sys.argv[1], extract_images=True)

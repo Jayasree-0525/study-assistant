@@ -9,8 +9,9 @@ from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
-from retrieval.tools import ALL_TOOLS
 from typing_extensions import TypedDict
+
+from retrieval.tools import ALL_TOOLS
 
 load_dotenv()
 

@@ -9,6 +9,9 @@ Run (from src/):
 Web search is disabled for every agent in this file, so the eval measures
 answers from the lecture notes only. The real app is unchanged.
 """
+"""
+Evaluation script for the study assistant agent.
+"""
 
 import argparse
 import os
@@ -18,17 +21,14 @@ import time
 from pathlib import Path
 from typing import Annotated
 
-# must be set before any chromadb import
+from dotenv import load_dotenv
+
+# must happen before chromadb imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
-
-from dotenv import find_dotenv, load_dotenv
-
-load_dotenv(find_dotenv(usecwd=True))
+load_dotenv(dotenv_path=Path(__file__).parent.parent.parent / ".env")
 
 if os.getenv("OPENAI_API_KEY") and not os.getenv("CHROMA_OPENAI_API_KEY"):
     os.environ["CHROMA_OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
-
-print(f"CHROMA key loaded: {bool(os.getenv('CHROMA_OPENAI_API_KEY'))}")
 
 from langchain_core.messages import SystemMessage
 from langchain_openai import ChatOpenAI
@@ -43,6 +43,8 @@ from evaluation.questions import EVAL_QUESTIONS
 from ingestion.vector_store import query_chroma
 from retrieval.tools import semantic_search
 
+# verify env loaded correctly
+print(f"CHROMA key loaded: {bool(os.getenv('CHROMA_OPENAI_API_KEY'))}")
 
 # ── helpers ────────────────────────────────────────────────────────────────────
 

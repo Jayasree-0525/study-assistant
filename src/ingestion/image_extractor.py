@@ -9,27 +9,31 @@ import fitz
 from dotenv import load_dotenv
 from openai import OpenAI
 
-load_dotenv()  # this reads the .env file and loads the OPENAI_API_KEY into the environment
+load_dotenv()
 
 
-# this function takes a pdf page and converts it into a png image in memory
 def _render_page_as_image(page: fitz.Page, dpi: int = 150) -> bytes:
-    mat = fitz.Matrix(
-        dpi / 72, dpi / 72
-    )  # DPI = Dots Per Inch. PDF page is natively 72 DPI. 150 DPI = rendering it at roughly 2x sharpness -> clear enough for GPT-4o to read diagrams and text
-    pix = page.get_pixmap(matrix=mat)  # renders the page as pixels
+    """Render a PDF page as a PNG image in memory."""
+    mat = fitz.Matrix(dpi / 72, dpi / 72)
+    pix = page.get_pixmap(matrix=mat)
     return pix.tobytes("png")
 
 
-# this function takes the raw png image bytes and converts it into a base64 string so it can be sent in a JSON api request
 def _encode_image_base64(image_bytes: bytes) -> str:
-    # PNG bytes are just an image stored as raw binary data
+    """Convert PNG bytes to a base64 string for the API request."""
     return base64.b64encode(image_bytes).decode("utf-8")
 
 
-# this function sends the base64 encoded image to GPT-4o with a prompt asking it to describe any visuals on the page.
-# It then gets a text description of any visuals on the page
+def _needs_vision(page: fitz.Page) -> bool:
+    """True if the page likely holds content that plain text extraction misses."""
+    text = page.get_text().strip()
+    has_images = len(page.get_images(full=True)) > 0
+    has_drawings = len(page.get_drawings()) > 20
+    return has_images or has_drawings or len(text) < 200
+
+
 def _describe_image_with_gpt4o(image_b64: str, client: OpenAI) -> str:
+    """Ask GPT-4o to transcribe and describe any visuals on the page."""
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[
@@ -39,29 +43,31 @@ def _describe_image_with_gpt4o(image_b64: str, client: OpenAI) -> str:
                     {
                         "type": "text",
                         "text": (
-                            "This is a lecture slide. Describe all diagrams, charts, figures, and equations in detail. If no visuals exist, respond with SKIP."
+                            "This is a lecture slide. Transcribe every text label in any "
+                            "diagram, chart, map or figure, and describe how the items are "
+                            "arranged (what is at the center, which items are grouped "
+                            "together, what the axes are, which items sit at the top, "
+                            "bottom, left and right). If no visuals exist, respond with SKIP."
                         ),
                     },
                     {
                         "type": "image_url",
                         "image_url": {
                             "url": f"data:image/png;base64,{image_b64}",
-                            "detail": "low",  # GPT-4o looks at a compressed 512x512 version of the image. Fast and cheap.
+                            "detail": "high",
                         },
                     },
                 ],
             }
         ],
-        max_tokens=500,  # caps the response, so GPT-4o can't write an essay about a single slide
+        max_tokens=800,
     )
     return response.choices[0].message.content
 
 
-# this is the main function that gets called and calls the other functions above.
 def extract_images_from_pdf(
-    # everything comes togther here.
     pdf_path: str,
-    max_pages: int = 20,  # strategy to control cost
+    max_pages: int = 60,  # safety cap on cost
 ) -> list[dict]:
     """Extract visual content from PDF pages using GPT-4o vision."""
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -69,19 +75,18 @@ def extract_images_from_pdf(
 
     results = []
     doc = fitz.open(str(pdf_path))
-    pages_to_process = min(len(doc), max_pages)
 
-    # for every page in the document it renders the pages as an image using helper function 1,
-    # then encodes to Base64 using function 2 & sends to GPT-4o to get a description
-    for page_num in range(pages_to_process):
+    candidates = [i for i in range(len(doc)) if _needs_vision(doc[i])][:max_pages]
+    print(f"  {len(candidates)} of {len(doc)} pages need vision")
+
+    for page_num in candidates:
         page = doc[page_num]
-        print(f"  Page {page_num + 1}/{pages_to_process}...", end=" ")
+        print(f"  Page {page_num + 1}...", end=" ")
 
-        image_bytes = _render_page_as_image(page)  # helper function 1
-        image_b64 = _encode_image_base64(image_bytes)  # helper function 2
-        description = _describe_image_with_gpt4o(image_b64, client)  # helper function 3
+        image_bytes = _render_page_as_image(page)
+        image_b64 = _encode_image_base64(image_bytes)
+        description = _describe_image_with_gpt4o(image_b64, client)
 
-        # if GPT-4o says no visuals skip, then continue. otherwise build a dictionary & append results
         if description.strip().upper() == "SKIP":
             print("no visuals, skipped")
             continue
@@ -103,7 +108,6 @@ def extract_images_from_pdf(
     return results
 
 
-# lets us run the file from the terminal for testing
 if __name__ == "__main__":
     import sys
 

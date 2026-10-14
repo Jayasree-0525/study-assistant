@@ -9,8 +9,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# ChromaDB v0.5+ requires this specific env var name
+if os.getenv("OPENAI_API_KEY") and not os.getenv("CHROMA_OPENAI_API_KEY"):
+    os.environ["CHROMA_OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+
 CHROMA_PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "./chroma_db")
 COLLECTION_NAME = "study_assistant"
+
+if os.getenv("OPENAI_API_KEY") and not os.getenv("CHROMA_OPENAI_API_KEY"):
+    os.environ["CHROMA_OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 
 def get_chroma_client() -> chromadb.PersistentClient:
