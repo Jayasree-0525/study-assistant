@@ -59,10 +59,10 @@ def ingest_document(
     else:
         print("2. Skipping image extraction (extract_images=False)")
 
-    '''print("3. Extracting tables...")
+    """print("3. Extracting tables...")
     table_data = extract_tables_from_pdf(str(file_path), db_path=db_path)
     summary["tables"] = len(table_data)
-    all_chunks.extend(chunk_pages(table_data))'''
+    all_chunks.extend(chunk_pages(table_data))"""
     print("3. Skipping table extraction (slide deck)")
 
     summary["total_chunks"] = len(all_chunks)

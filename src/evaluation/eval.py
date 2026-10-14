@@ -9,6 +9,7 @@ Run (from src/):
 Web search is disabled for every agent in this file, so the eval measures
 answers from the lecture notes only. The real app is unchanged.
 """
+
 """
 Evaluation script for the study assistant agent.
 """
@@ -47,6 +48,7 @@ from retrieval.tools import semantic_search
 print(f"CHROMA key loaded: {bool(os.getenv('CHROMA_OPENAI_API_KEY'))}")
 
 # ── helpers ────────────────────────────────────────────────────────────────────
+
 
 def normalize(text: str) -> str:
     """Lowercase and normalize hyphens/underscores/slashes for matching."""
@@ -100,8 +102,7 @@ def check_answer(
     return found >= min_required
 
 
-NEGATORS = ["not ", "no ", "isn't", "aren't", "doesn't", "never",
-            "rather than", "instead of", "incorrect", "there is no"]
+NEGATORS = ["not ", "no ", "isn't", "aren't", "doesn't", "never", "rather than", "instead of", "incorrect", "there is no"]
 
 
 def check_false_premise(answer: str, q: dict) -> bool:
@@ -113,10 +114,12 @@ def check_false_premise(answer: str, q: dict) -> bool:
     accepted = False
     for p in q.get("hallucination_phrases", []):
         for m in re.finditer(re.escape(normalize(p)), a):
-            window = a[max(0, m.start() - 40): m.start()]
+            window = a[max(0, m.start() - 40) : m.start()]
             if not any(n in window for n in NEGATORS):
                 accepted = True
     return has_correction and not accepted
+
+
 '''
 def check_false_premise(answer: str, q: dict) -> bool:
     """
@@ -145,6 +148,7 @@ def check_false_premise(answer: str, q: dict) -> bool:
     )
     return has_correction and not has_hallucination
 '''
+
 
 def check_refusal(answer: str) -> bool:
     """Check if the agent correctly refused an unanswerable question."""
@@ -177,6 +181,7 @@ def check_refusal(answer: str) -> bool:
 
 # ── no-web agent (used for ALL eval questions) ─────────────────────────────────
 
+
 def build_no_web_agent():
     """Agent with web search disabled, so answers come from the notes only."""
 
@@ -198,7 +203,6 @@ Answer ONLY from the retrieved lecture notes and cite the page number.
 - Use only facts that appear in the retrieved notes. Do not add reasoning or
   examples from general knowledge.
 Do not search the web."""
-
 
     class AgentState(TypedDict):
         messages: Annotated[list, add_messages]
@@ -236,6 +240,7 @@ Do not search the web."""
 
 
 # ── main evaluation ────────────────────────────────────────────────────────────
+
 
 def run_evaluation(held_out: bool = False) -> dict:
     """
@@ -276,9 +281,7 @@ def run_evaluation(held_out: bool = False) -> dict:
     for q in regular_qs:
         print(f"\nQ{q['id']} [{q['category']}]: {q['question'][:55]}...")
 
-        hit, rank = check_retrieval(
-            q["question"], q["expected_keywords"], q["source_pages"], k=5
-        )
+        hit, rank = check_retrieval(q["question"], q["expected_keywords"], q["source_pages"], k=5)
         if hit:
             hits += 1
             reciprocal_ranks.append(1 / rank)
@@ -357,12 +360,7 @@ def run_evaluation(held_out: bool = False) -> dict:
     print(f"Failed ids:          {failed_ids}")
     print("=" * 60)
     print("\nResume line:")
-    print(
-        f'  "Evaluated on {len(questions)} questions; '
-        f"hit rate@5 {hit_rate:.0%}, "
-        f"answer accuracy {acc:.0%}, "
-        f'refusal rate {refusal_rate:.0%}"'
-    )
+    print(f'  "Evaluated on {len(questions)} questions; hit rate@5 {hit_rate:.0%}, answer accuracy {acc:.0%}, refusal rate {refusal_rate:.0%}"')
 
     return {
         "hit_rate_at_5": hit_rate,

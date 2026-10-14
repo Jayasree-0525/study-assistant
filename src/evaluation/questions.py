@@ -1,7 +1,6 @@
 """Evaluation question set for the study assistant."""
 
 EVAL_QUESTIONS = [
-
     # ── RECALL (tune on these) ─────────────────────────────────────────
     {
         "id": 1,
@@ -139,7 +138,6 @@ EVAL_QUESTIONS = [
         "source_pages": [29],
         "category": "recall",
     },
-
     # ── CONCEPTUAL ─────────────────────────────────────────────────────
     {
         "id": 24,
@@ -159,7 +157,6 @@ EVAL_QUESTIONS = [
         "source_pages": [7],
         "category": "conceptual",
     },
-
     # ── MULTI-STEP ─────────────────────────────────────────────────────
     {
         "id": 26,
@@ -197,7 +194,6 @@ EVAL_QUESTIONS = [
         "source_pages": [18, 27, 28],
         "category": "multi_step",
     },
-
     # ── TABLE / DIAGRAM ────────────────────────────────────────────────
     {
         "id": 30,
@@ -238,7 +234,6 @@ EVAL_QUESTIONS = [
         "category": "table",
         "note": "Image-only diagram — expects retrieval miss",
     },
-
     # ── FALSE PREMISE ──────────────────────────────────────────────────
     {
         "id": 33,
@@ -250,13 +245,15 @@ EVAL_QUESTIONS = [
         "category": "false_premise",
         "correction_check": True,
         "correction_phrases": [
-            "five, not six", "only five", "there are five",
-            "five forces", "not six",
+            "five, not six",
+            "only five",
+            "there are five",
+            "five forces",
+            "not six",
         ],
         "hallucination_phrases": ["sixth force", "six forces", "6 forces"],
         "note": "Must correct to five. Fail if lists a sixth force.",
     },
-
     # ── HELD-OUT (do not tune on these — run separately) ──────────────
     {
         "id": 16,
@@ -338,7 +335,7 @@ EVAL_QUESTIONS = [
         "category": "recall",
         "held_out": True,
     },
-        # ---- HELD OUT, PARAPHRASED (hard set): do not tune on these ----
+    # ---- HELD OUT, PARAPHRASED (hard set): do not tune on these ----
     {
         "id": 40,
         "question": "Why might a customer be able to negotiate a better deal from a seller?",
@@ -483,78 +480,167 @@ EVAL_QUESTIONS = [
         "held_out": True,
         "note": "Near-miss: wine is in the lecture, market size by country is not",
     },
-
-        # ---- HELD OUT 2 (from a second AI, de-duplicated): do not tune on these ----
-    {"id": 100, "question": "What specific factors regarding industry rivals are evaluated under dominant economic traits?",
-     "expected_keywords": ["scope", "vertical", "integration"], "min_keywords_required": 2,
-     "answerable": True, "source_pages": [11], "category": "recall", "held_out": True},
-   
-    {"id": 101, "question": "Which professional roles or individuals are specifically identified as needing to perform an external analysis?",
-     "expected_keywords": ["entrepreneurs", "developers", "managers", "consultants", "investors"], "min_keywords_required": 3,
-     "answerable": True, "source_pages": [6], "category": "recall", "held_out": True},
-    
-    {"id": 103, "question": "What motivations are listed for why someone should conduct an external analysis?",
-     "expected_keywords": ["enter", "extricate", "position", "succeed", "deregulation"], "min_keywords_required": 3,
-     "answerable": True, "source_pages": [5], "category": "recall", "held_out": True},
-   
-    {"id": 104, "question": "What conditions make the threat of new entry into an industry stronger?",
-     "expected_keywords": ["growing", "growth", "profit", "incumbents", "candidates", "barriers"], "min_keywords_required": 3,
-     "answerable": True, "source_pages": [23], "category": "recall", "held_out": True},
-   
-    {"id": 105, "question": "What cost-related economic traits are examined when analyzing an industry's dominant economic traits?",
-     "expected_keywords": ["economies", "scale", "learning", "advantages"], "min_keywords_required": 2,
-     "answerable": True, "source_pages": [11], "category": "recall", "held_out": True},
-   
-    {"id": 117, "question": "What explains the low supplier power and low threat of substitutes in engineering consulting?",
-     "expected_keywords": ["universities", "portable", "P.Eng", "regulat*"], "min_keywords_required": 2,
-     "answerable": True, "source_pages": [28], "category": "multi_step"},
-   
-    {"id": 118, "question": "Which driving forces reshaped the energy sector, and what examples demonstrate technological and regulatory shifts?",
-     "expected_keywords": ["solar", "Fukushima", "Ontario", "nuclear"], "min_keywords_required": 3,
-     "answerable": True, "source_pages": [35], "category": "multi_step", "held_out": True},
-   
-    {"id": 123, "question": "What was Apple Inc.'s exact net income in fiscal year 2024?",
-     "expected_keywords": [], "min_keywords_required": 1, "answerable": False,
-     "source_pages": [], "category": "unanswerable", "held_out": True},
-    
-    {"id": 124, "question": "What precise percentage of market share does Netflix hold in the video-streaming industry as of 2026?",
-     "expected_keywords": [], "min_keywords_required": 1, "answerable": False,
-     "source_pages": [], "category": "unanswerable", "held_out": True},
-   
-    {"id": 125, "question": "Who founded Aerocoustics Engineering Ltd and in what specific year was it incorporated?",
-     "expected_keywords": [], "min_keywords_required": 1, "answerable": False,
-     "source_pages": [], "category": "unanswerable", "held_out": True},
-   
-    {"id": 126, "question": "What exact stock price did Microsoft trade at when investing in the Nook in 2012?",
-     "expected_keywords": [], "min_keywords_required": 1, "answerable": False,
-     "source_pages": [], "category": "unanswerable", "held_out": True},
-   
-    {"id": 127, "question": "What are the seven forces comprising Porter's Seven Forces model of competitive intensity?",
-     "expected_keywords": [], "min_keywords_required": 1, "answerable": True,
-     "source_pages": [14], "category": "false_premise", "held_out": True, "correction_check": True,
-     "correction_phrases": ["five, not seven", "only five", "there are five", "five forces", "not seven"],
-     "hallucination_phrases": ["seven forces", "7 forces", "seventh force"]},
-   
-    {"id": 128, "question": "Why does the lecture outline exactly four core questions of external analysis?",
-     "expected_keywords": [], "min_keywords_required": 1, "answerable": True,
-     "source_pages": [10], "category": "false_premise", "correction_check": True,
-     "correction_phrases": ["seven, not four", "seven questions", "not four", "there are seven"],
-     "hallucination_phrases": ["four questions", "4 questions", "fourth question", "four core questions", "exactly four"]},
-   
-    {"id": 129, "question": "How does Porter's Five Forces model incorporate government taxation as its sixth core force?",
-     "expected_keywords": [], "min_keywords_required": 1, "answerable": True,
-     "source_pages": [14], "category": "false_premise", "correction_check": True,
-     "correction_phrases": ["five forces", "not six", "taxation is not", "not a force"],
-     "hallucination_phrases": ["sixth force", "taxation force", "six forces"]},
-
+    # ---- HELD OUT 2 (from a second AI, de-duplicated): do not tune on these ----
+    {
+        "id": 100,
+        "question": "What specific factors regarding industry rivals are evaluated under dominant economic traits?",
+        "expected_keywords": ["scope", "vertical", "integration"],
+        "min_keywords_required": 2,
+        "answerable": True,
+        "source_pages": [11],
+        "category": "recall",
+        "held_out": True,
+    },
+    {
+        "id": 101,
+        "question": "Which professional roles or individuals are specifically identified as needing to perform an external analysis?",
+        "expected_keywords": ["entrepreneurs", "developers", "managers", "consultants", "investors"],
+        "min_keywords_required": 3,
+        "answerable": True,
+        "source_pages": [6],
+        "category": "recall",
+        "held_out": True,
+    },
+    {
+        "id": 103,
+        "question": "What motivations are listed for why someone should conduct an external analysis?",
+        "expected_keywords": ["enter", "extricate", "position", "succeed", "deregulation"],
+        "min_keywords_required": 3,
+        "answerable": True,
+        "source_pages": [5],
+        "category": "recall",
+        "held_out": True,
+    },
+    {
+        "id": 104,
+        "question": "What conditions make the threat of new entry into an industry stronger?",
+        "expected_keywords": ["growing", "growth", "profit", "incumbents", "candidates", "barriers"],
+        "min_keywords_required": 3,
+        "answerable": True,
+        "source_pages": [23],
+        "category": "recall",
+        "held_out": True,
+    },
+    {
+        "id": 105,
+        "question": "What cost-related economic traits are examined when analyzing an industry's dominant economic traits?",
+        "expected_keywords": ["economies", "scale", "learning", "advantages"],
+        "min_keywords_required": 2,
+        "answerable": True,
+        "source_pages": [11],
+        "category": "recall",
+        "held_out": True,
+    },
+    {
+        "id": 117,
+        "question": "What explains the low supplier power and low threat of substitutes in engineering consulting?",
+        "expected_keywords": ["universities", "portable", "P.Eng", "regulat*"],
+        "min_keywords_required": 2,
+        "answerable": True,
+        "source_pages": [28],
+        "category": "multi_step",
+    },
+    {
+        "id": 118,
+        "question": "Which driving forces reshaped the energy sector, and what examples demonstrate technological and regulatory shifts?",
+        "expected_keywords": ["solar", "Fukushima", "Ontario", "nuclear"],
+        "min_keywords_required": 3,
+        "answerable": True,
+        "source_pages": [35],
+        "category": "multi_step",
+        "held_out": True,
+    },
+    {
+        "id": 123,
+        "question": "What was Apple Inc.'s exact net income in fiscal year 2024?",
+        "expected_keywords": [],
+        "min_keywords_required": 1,
+        "answerable": False,
+        "source_pages": [],
+        "category": "unanswerable",
+        "held_out": True,
+    },
+    {
+        "id": 124,
+        "question": "What precise percentage of market share does Netflix hold in the video-streaming industry as of 2026?",
+        "expected_keywords": [],
+        "min_keywords_required": 1,
+        "answerable": False,
+        "source_pages": [],
+        "category": "unanswerable",
+        "held_out": True,
+    },
+    {
+        "id": 125,
+        "question": "Who founded Aerocoustics Engineering Ltd and in what specific year was it incorporated?",
+        "expected_keywords": [],
+        "min_keywords_required": 1,
+        "answerable": False,
+        "source_pages": [],
+        "category": "unanswerable",
+        "held_out": True,
+    },
+    {
+        "id": 126,
+        "question": "What exact stock price did Microsoft trade at when investing in the Nook in 2012?",
+        "expected_keywords": [],
+        "min_keywords_required": 1,
+        "answerable": False,
+        "source_pages": [],
+        "category": "unanswerable",
+        "held_out": True,
+    },
+    {
+        "id": 127,
+        "question": "What are the seven forces comprising Porter's Seven Forces model of competitive intensity?",
+        "expected_keywords": [],
+        "min_keywords_required": 1,
+        "answerable": True,
+        "source_pages": [14],
+        "category": "false_premise",
+        "held_out": True,
+        "correction_check": True,
+        "correction_phrases": ["five, not seven", "only five", "there are five", "five forces", "not seven"],
+        "hallucination_phrases": ["seven forces", "7 forces", "seventh force"],
+    },
+    {
+        "id": 128,
+        "question": "Why does the lecture outline exactly four core questions of external analysis?",
+        "expected_keywords": [],
+        "min_keywords_required": 1,
+        "answerable": True,
+        "source_pages": [10],
+        "category": "false_premise",
+        "correction_check": True,
+        "correction_phrases": ["seven, not four", "seven questions", "not four", "there are seven"],
+        "hallucination_phrases": ["four questions", "4 questions", "fourth question", "four core questions", "exactly four"],
+    },
+    {
+        "id": 129,
+        "question": "How does Porter's Five Forces model incorporate government taxation as its sixth core force?",
+        "expected_keywords": [],
+        "min_keywords_required": 1,
+        "answerable": True,
+        "source_pages": [14],
+        "category": "false_premise",
+        "correction_check": True,
+        "correction_phrases": ["five forces", "not six", "taxation is not", "not a force"],
+        "hallucination_phrases": ["sixth force", "taxation force", "six forces"],
+    },
     # ── UNANSWERABLE (web search disabled during eval) ─────────────────
     {
         "id": 34,
         "question": "What is Apple's current market capitalization?",
         "expected_keywords": [
-            "not in the notes", "not covered", "doesn't cover",
-            "no information", "couldn't find", "isn't covered",
-            "not mentioned", "does not contain", "not available",
+            "not in the notes",
+            "not covered",
+            "doesn't cover",
+            "no information",
+            "couldn't find",
+            "isn't covered",
+            "not mentioned",
+            "does not contain",
+            "not available",
         ],
         "min_keywords_required": 1,
         "answerable": False,
@@ -565,9 +651,15 @@ EVAL_QUESTIONS = [
         "id": 35,
         "question": "What is the recipe for making wine?",
         "expected_keywords": [
-            "not in the notes", "not covered", "doesn't cover",
-            "no information", "couldn't find", "isn't covered",
-            "not mentioned", "does not contain", "not available",
+            "not in the notes",
+            "not covered",
+            "doesn't cover",
+            "no information",
+            "couldn't find",
+            "isn't covered",
+            "not mentioned",
+            "does not contain",
+            "not available",
         ],
         "min_keywords_required": 1,
         "answerable": False,
@@ -579,9 +671,15 @@ EVAL_QUESTIONS = [
         "id": 36,
         "question": "What is Canada's current GDP?",
         "expected_keywords": [
-            "not in the notes", "not covered", "doesn't cover",
-            "no information", "couldn't find", "isn't covered",
-            "not mentioned", "does not contain", "not available",
+            "not in the notes",
+            "not covered",
+            "doesn't cover",
+            "no information",
+            "couldn't find",
+            "isn't covered",
+            "not mentioned",
+            "does not contain",
+            "not available",
         ],
         "min_keywords_required": 1,
         "answerable": False,
@@ -592,9 +690,15 @@ EVAL_QUESTIONS = [
         "id": 37,
         "question": "Who is the current CEO of SNC Lavalin?",
         "expected_keywords": [
-            "not in the notes", "not covered", "doesn't cover",
-            "no information", "couldn't find", "isn't covered",
-            "not mentioned", "does not contain", "not available",
+            "not in the notes",
+            "not covered",
+            "doesn't cover",
+            "no information",
+            "couldn't find",
+            "isn't covered",
+            "not mentioned",
+            "does not contain",
+            "not available",
         ],
         "min_keywords_required": 1,
         "answerable": False,
@@ -606,14 +710,19 @@ EVAL_QUESTIONS = [
         "id": 38,
         "question": "What is the chemical formula for ethanol?",
         "expected_keywords": [
-            "not in the notes", "not covered", "doesn't cover",
-            "no information", "couldn't find", "isn't covered",
-            "not mentioned", "does not contain", "not available",
+            "not in the notes",
+            "not covered",
+            "doesn't cover",
+            "no information",
+            "couldn't find",
+            "isn't covered",
+            "not mentioned",
+            "does not contain",
+            "not available",
         ],
         "min_keywords_required": 1,
         "answerable": False,
         "source_pages": [],
         "category": "unanswerable",
     },
-
 ]
